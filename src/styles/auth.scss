@@ -87,9 +87,17 @@
       }
     }
   }
+
+  .imgperfil {
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  }
   .create-room {
     margin-top: 64px;
-    height: 50px;
+    height: 60px;
     border-radius: 8px;
     font-weight: 500;
     background: #ea4335;
@@ -113,6 +121,13 @@
     }
   }
 
+  .btnOut {
+    font-size: 16px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
   .separator {
     font-size: 14px;
     color: #a8a8b3;

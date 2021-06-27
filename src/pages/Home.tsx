@@ -1,16 +1,19 @@
 import { useHistory } from 'react-router-dom'
 import { FormEvent, useState } from 'react';
 
+import { toast } from 'react-hot-toast';
+
 import illustrationImg from '../assets/images/illustration.svg'
 import logoImg from '../assets/images/logo.svg';
 import googleIconImg from '../assets/images/google-icon.svg';
 
-import { database } from '../services/firebase';
+import { auth, database } from '../services/firebase';
 
-import {Button} from '../components/Button';
+import { Button } from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 
 import '../styles/auth.scss';
+
 
 export function Home(){
   const history = useHistory();
@@ -20,11 +23,25 @@ export function Home(){
 
   async function handleCerateRoom() {
     if (!user){
+      toast.success('Successfully toasted!');
       await signInWithGoogle()
     }
-    
-    history.push('/rooms/new');  
+      
+      history.push('/rooms/new');  
   }
+
+  async function signOutGoogle() {
+    await auth.signOut().then(() => {
+      window.location.reload();
+    }).catch((error) => 
+    {
+      toast.error('Sign out error');
+    });
+    
+    toast.success('Sigout sucessfu, redirect you access!!');
+
+
+  } 
 
   async function handleJoinRoom(event: FormEvent) {
     event.preventDefault();
@@ -59,9 +76,12 @@ export function Home(){
         <div className="main-content">
           <img src={logoImg} alt="Letmeask" />
           <button onClick={handleCerateRoom} className="create-room">
-            <img src={googleIconImg} alt="Logo do Google" />
-            Crie sua sala com o Google
+           {!user ? <img src={googleIconImg} alt="" /> : ""} 
+           {!!user ? `Crie sua sala ${user.name}.` : "Crie sua sala com o Google."}
           </button>
+          <p>{!!user ? `Não é ${user.name}? ` : ""}
+          {!!user ? <button className="btnOut" onClick={signOutGoogle}>sair</button> : "" }
+          </p>
           <div className="separator">ou entre em uma sala</div>
           <form onSubmit={handleJoinRoom}>
             <input 
